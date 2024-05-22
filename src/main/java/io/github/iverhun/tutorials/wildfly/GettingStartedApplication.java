@@ -1,4 +1,4 @@
-package org.wildfly.examples;
+package io.github.iverhun.tutorials.wildfly;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

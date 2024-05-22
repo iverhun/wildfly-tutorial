@@ -1,4 +1,4 @@
-package org.wildfly.examples;
+package io.github.iverhun.tutorials.wildfly;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

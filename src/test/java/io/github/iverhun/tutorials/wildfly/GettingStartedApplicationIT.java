@@ -1,4 +1,4 @@
-package org.wildfly.examples;
+package io.github.iverhun.tutorials.wildfly;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -1,3 +1,5 @@
 target/
 .idea/
 .settings
+.DS_Store
+wildfly-tutorial.iml
