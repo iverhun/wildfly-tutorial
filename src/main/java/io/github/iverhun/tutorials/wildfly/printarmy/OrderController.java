@@ -21,29 +21,28 @@ public class OrderController {
     @Inject
     private Logger log;
 
-    @Inject                                                          // (4)
+    @Inject
     private Validator validator;
 
-    @Inject                                                          // (5)
+    @Inject
     private OrderRepository repository;
 
-    @Inject                                                          // (6)
+    @Inject
     private OrderRegistration registration;
 
-    @GET                                                             // (7)
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Order> listAllOrders() {
         return repository.findAllOrderedByName();
     }
 
-    @GET                                                             // (8)
+    @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     public Order lookupOrderById(@PathParam("id") long id) {
         Order order = repository.findById(id);
         if (order == null) {
-            throw new
-                    WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return order;
     }
@@ -56,34 +55,30 @@ public class OrderController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createOrder(Order order) {                    // (9)
-        Response.ResponseBuilder builder = null;
+    public Response createOrder(Order order) {
+        Response.ResponseBuilder builder;
 
         try {
             // Validates order using bean validation
-            validateOrder(order);                                  // (10)
+            validateOrder(order);
 
-            registration.register(order);                           // (11)
+            registration.register(order);
 
             //Create an "ok" response
             builder = Response.ok();
-        } catch (ConstraintViolationException ce) {                  // (12)
+        } catch (ConstraintViolationException ce) {
             //Handle bean validation issues
             builder = createViolationResponse(ce.getConstraintViolations());
         } catch (ValidationException e) {
             //Handle the unique constrain violation
-            Map<String, String> responseObj =
-                    new HashMap<String, String>();
-            responseObj.put("email", "Email taken");
-            builder = Response.status(Response.Status.CONFLICT)
-                    .entity(responseObj);
+            Map<String, String> responseObj = new HashMap<>();
+            responseObj.put("email", "Name taken");
+            builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
         } catch (Exception e) {
             // Handle generic exceptions
-            Map<String, String> responseObj
-                    = new HashMap<String, String>();
+            Map<String, String> responseObj = new HashMap<>();
             responseObj.put("error", e.getMessage());
-            builder = Response.status(Response.Status.BAD_REQUEST)
-                    .entity(responseObj);
+            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
 
         return builder.build();
@@ -100,7 +95,7 @@ public class OrderController {
      * </p>
      * <p>
      * If the error is caused because an existing order with the
-     * same email is registered it throws a regular validation
+     * same name is registered it throws a regular validation
      * exception so that it can be interpreted separately.
      * </p>
      *
@@ -110,16 +105,12 @@ public class OrderController {
      * @throws ValidationException
      *     If order with the same email already exists
      */
-    private void validateOrder(Order order)
-            throws ConstraintViolationException,
-            ValidationException {
+    private void validateOrder(Order order) throws ConstraintViolationException, ValidationException {
         //Create a bean validator and check for issues.
-        Set<ConstraintViolation<Order>> violations =
-                validator.validate(order);
+        Set<ConstraintViolation<Order>> violations = validator.validate(order);
 
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(
-                    new HashSet<ConstraintViolation<?>>(violations));
+            throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
         //Check the uniqueness of the email address
@@ -137,16 +128,13 @@ public class OrderController {
      *                   reported
      * @return JAX-RS response containing all violations
      */
-    private Response.ResponseBuilder createViolationResponse
-    (Set<ConstraintViolation<?>> violations) {
-        log.fine("Validation completed. violations found: "
-                + violations.size());
+    private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
+        log.fine("Validation completed. violations found: " + violations.size());
 
         Map<String, String> responseObj = new HashMap<>();
 
         for (ConstraintViolation<?> violation : violations) {
-            responseObj.put(violation.getPropertyPath().toString(),
-                    violation.getMessage());
+            responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
         }
 
         return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
