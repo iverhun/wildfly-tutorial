@@ -4,6 +4,10 @@
 The `wildfly-tutorial` project is a simple Jakarta EE application with a HTTP endpoint that is running in
 https://wildfly.org[WildFly].
 
+This tutorial is an illustration for the https://www.youtube.com/watch?v=2DZs_9qjCMM[Lviv JavaClub [Event 323\] WildFly a modular application server] presentation.
+
+Special credits to https://github.com/hantsy[Hantsy Bai(@hantsy)] for the best repo with working examples: https://github.com/hantsy/jakartaee10-starter-boilerplate
+
 == Creating a wildfly project from scratch
 You may use one of the WildFly maven archetypes to generate project structure and sample code from scratch:
 

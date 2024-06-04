@@ -40,7 +40,7 @@ public class OrderRegistrationIT {
         newOrder.setName("FPV Cam Holder");
         newOrder.setPhoneNumber("jane@printservice.org");
         newOrder.setPhoneNumber("2125551234");
-        newOrder.setCustomer("Banadiga");
+        newOrder.setCustomer("Ben Adiga");
         orderRegistration.register(newOrder);
         Assertions.assertNotNull(newOrder.getId());
         log.info(newOrder.getName() + " was persisted with id " + newOrder.getId());

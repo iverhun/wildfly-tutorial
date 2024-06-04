@@ -223,6 +223,10 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
+                    <extra-server-content-dirs>
+                        <extra-content>extra-content</extra-content>
+                    </extra-server-content-dirs>
+
                     <!-- https://docs.wildfly.org/32/Galleon_Guide.html#WildFly_Galleon_feature-packs -->
                     <feature-packs>
                         <feature-pack>
@@ -238,7 +242,15 @@
                         <layer>cloud-server</layer>
                         <layer>h2-driver</layer>
                         <layer>logging</layer>
+                        <layer>web-console</layer>
                     </layers>
+
+                    <!-- Glow version ->
+                    <discover-provisioning-info>
+                        <suggest>true</suggest>
+                        <verbose>true</verbose>
+                    </discover-provisioning-info>
+                    -->
                 </configuration>
                 <executions>
                     <execution>
